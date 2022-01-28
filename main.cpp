@@ -25,8 +25,8 @@ int main(int argc, char *argv[])
     {
         qDebug() << "without argument...";
 
-        server.setPort(7001);
-        server.setIp("192.168.0.35");
+        server.setPort(3001);
+        server.setIp("172.16.40.26");
         server.initSocket();
     }
 

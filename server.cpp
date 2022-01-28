@@ -18,6 +18,10 @@ void Server::initSocket()
         connect(udpsocket,&QUdpSocket::hostFound,this,&Server::onNewConnection);
 
         qDebug() << "server started...";
+        connectToTurnstile();
+
+        std::thread sendThread(&Server::process,this);
+        sendThread.detach();
     }
     else
     {
@@ -57,7 +61,7 @@ void Server::readPendingDatagrams()
     while (udpsocket->hasPendingDatagrams()) {
         QNetworkDatagram datagram = udpsocket->receiveDatagram();
         QByteArray replyData = processThePayload(datagram.data());
-        udpsocket->writeDatagram(datagram.makeReply(replyData));
+        //udpsocket->writeDatagram(datagram.makeReply(replyData));
     }
 }
 
@@ -73,9 +77,11 @@ void Server::process()
 {
     string message;
 
-    cout << "Enter message: " << endl;
-    cin >> message;
-    sendMessage(QString::fromStdString(message));
+    cout << "Enter message to client: " << endl;
+    while(getline(cin,message))
+    {
+        sendMessage(QString::fromStdString(message));
+    }
 }
 
 QByteArray Server::processThePayload(QByteArray data)
@@ -104,4 +110,10 @@ void Server::setIp(QString ip)
 QString Server::getIp()
 {
     return m_ip;
+}
+
+void Server::connectToTurnstile()
+{
+
+    //sendMessage("aa70c305021e7298e73a6a01");
 }

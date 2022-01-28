@@ -10,6 +10,7 @@
 #include <string>
 #include <QTimer>
 
+#include <thread>
 
 using namespace std;
 
@@ -30,6 +31,9 @@ public:
 
     void setIp(QString ip);
     QString getIp();
+
+
+    void connectToTurnstile();
 
 
 public slots:
