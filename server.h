@@ -46,6 +46,8 @@ public slots:
 
     void sendAutoMessageToClient();
 private:
+
+    QNetworkDatagram datagram;
     QUdpSocket *udpsocket;
     quint16 m_port;
     QString m_ip;

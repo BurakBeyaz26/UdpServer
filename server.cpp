@@ -10,7 +10,7 @@ void Server::initSocket()
 
     if(udpsocket->bind(QHostAddress(m_ip), m_port))
     {
-        connect(udpsocket, &QUdpSocket::readyRead,this, &Server::readPendingDatagrams);
+        connect(udpsocket,&QUdpSocket::readyRead,this, &Server::readPendingDatagrams);
         connect(udpsocket,&QUdpSocket::connected,this,&Server::connected);
         connect(udpsocket,&QUdpSocket::disconnected,this,&Server::disconnected);
         connect(udpsocket,&QUdpSocket::hostFound,this,&Server::hostFound);
@@ -50,18 +50,19 @@ void Server::closed()
 
 void Server::sendAutoMessageToClient()
 {
+    qDebug() << "sdasafsfa";
     QByteArray Data;
-    Data.append("Serverdan gelen mesaj");
+    Data.append("Serverdan gelen mesaj burakkkk");
 
-    udpsocket->writeDatagram(Data, QHostAddress(m_ip), m_port);
+    udpsocket->writeDatagram(Data, QHostAddress("172.16.40.231"), m_port);
 }
 
 void Server::readPendingDatagrams()
 {
     while (udpsocket->hasPendingDatagrams()) {
-        QNetworkDatagram datagram = udpsocket->receiveDatagram();
+        datagram = udpsocket->receiveDatagram();
         QByteArray replyData = processThePayload(datagram.data());
-        //udpsocket->writeDatagram(datagram.makeReply(replyData));
+        //udpsocket->writeDatagram(datagram.makeReply("Welcome to UDP SERVER..."));         //datagram.makeReply(replyData)
     }
 }
 
@@ -70,7 +71,8 @@ void Server::sendMessage(QString message)
     QByteArray Data;
     Data.append(message.toUtf8());
 
-    udpsocket->writeDatagram(Data, QHostAddress(m_ip), m_port);
+    udpsocket->writeDatagram(datagram.makeReply(Data));
+    //udpsocket->writeDatagram("sie",QHostAddress("172.16.40.231"), 3001);
 }
 
 void Server::process()
